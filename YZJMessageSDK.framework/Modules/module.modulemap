@@ -1,0 +1,11 @@
+framework module YZJMessageSDK {
+  umbrella header "YZJMessageSDK-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module YZJMessageSDK.Swift {
+    header "YZJMessageSDK-Swift.h"
+    requires objc
+}
