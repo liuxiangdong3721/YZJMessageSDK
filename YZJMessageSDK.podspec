@@ -66,7 +66,7 @@ TODO: Add long description of the pod here.
     s.dependency 'PromiseKit/CorePromise'
     s.dependency 'AMapLocation'
 
-    s.dependency 'ExOpenCoreAmr'
+    s.dependency 'KDOpenCoreAmr'
     s.dependency 'KDMerc'
     #s.dependency 'KDFoundation'
 
