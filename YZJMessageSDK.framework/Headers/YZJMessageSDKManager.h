@@ -24,6 +24,16 @@ NS_ASSUME_NONNULL_BEGIN
 // UI 配置
 @property (nonatomic, strong, nullable) UIImage *groupListNavLeftIconImage; // 群组列表导航栏左侧头像图片
 @property (nonatomic, strong, nullable) NSString *groupListNavTitle;        // 群组列表导航栏标题，默认："消息"
+@property (nonatomic, strong, nullable) UIImage *groupListNavBackImage;     // 群组列表导航背景图片，默认："蓝色"
+
+// + pop 添加按钮
+/** eg:
+    KDPlusMenuViewModel *chat = [KDPlusMenuViewModel modelWithTitle:NSLocalizedStringFromTableInBundle(@"发起群聊", nil, [YZJLocalized bundle], @"") imageName:@"menu_new_btn_session_normal" selectImageName:@"menu_btn_session_press" selection:^{
+ 
+    ];
+*/
+@property (nonatomic, strong, nullable) NSArray *plusMenuArray;
+
 
 //@property (nonatomic, strong, nonnull) NSString *openToken;
 //@property (nonatomic, strong, nonnull) NSString *userAgent;
@@ -75,7 +85,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (id<YZJMessageSDKManagerDelegate>)delegate;
 
 /// 消息列表 view controller 注意是：UINavigationController
-- (UINavigationController *)timelineVC;
+- (UIViewController *)timelineVC;
+- (UINavigationController *)timelineNavVC;
 
 /// 收到推送后 打开推送消息
 //- (void)openMsgWithMsgId:(NSString *)msgId;
@@ -85,7 +96,8 @@ NS_ASSUME_NONNULL_BEGIN
 //标记是客户端还是员工端
 @property(nonatomic,assign) int flag;
 
-//-(NSMutableDictionary *)getTokenByUserName:(NSString *)userName;
+// 获取 token
+- (NSMutableDictionary *)getTokenByUserName:(NSString *)userName;
 
 /**
  * 分享文字接口
