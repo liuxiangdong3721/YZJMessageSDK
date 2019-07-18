@@ -38,6 +38,14 @@ NS_ASSUME_NONNULL_BEGIN
 //@property (nonatomic, strong, nonnull) NSString *openToken;
 //@property (nonatomic, strong, nonnull) NSString *userAgent;
 //@property (nonatomic, strong, nonnull) NSString *clientId;
+
+// clientId 配置
+@property (nonatomic, copy) NSString *iPhoneClientId;
+@property (nonatomic, copy) NSString *iPadClientId;
+@property (nonatomic ,copy) NSString *appClientId;
+@property (nonatomic, copy) NSString *appOauthKey;
+@property (nonatomic, copy) NSString *appOauthSecret;
+
 @end
 
 //typedef void(^YZJTimelineBlock)(void);
@@ -50,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///// 左边按钮的图片 和 点击操作
 //@property (nonatomic, strong, nonnull) UIImage *leftImage;
 //@property (nonatomic, copy, nonnull) YZJTimelineBlock leftBlock;
-//
+    
 @end
 
 
@@ -65,6 +73,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+typedef void(^YZJLoginResultBlock)(BOOL);
+
 @interface YZJMessageSDKManager : NSObject
 
 
@@ -75,7 +85,10 @@ NS_ASSUME_NONNULL_BEGIN
                delegate:(id<YZJMessageSDKManagerDelegate>)delegate;
 
 /// 用户登录，登录成功后会执行数据初始化操作，建立长连
-- (void)loginWithUsername:(NSString *)username password:(NSString *)password;
+- (void)loginWithUsername:(NSString *)username
+                 password:(NSString *)password;
+//              resultBlock:(YZJLoginResultBlock)resultBlock;
+    
 
 /// 用户退出登录
 - (void)logout;
@@ -89,15 +102,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (UINavigationController *)timelineNavVC;
 
 /// 收到推送后 打开推送消息
-//- (void)openMsgWithMsgId:(NSString *)msgId;
-
-/// ==== 兼容旧版本sdk api ====
-
-//标记是客户端还是员工端
-@property(nonatomic,assign) int flag;
+- (void)openMsgWithGroupId:(NSString *)groupId;
 
 // 获取 token
-- (NSMutableDictionary *)getTokenByUserName:(NSString *)userName;
+- (NSMutableDictionary *)getTokenByUserName:(NSString *)userName password:(NSString *)password;
+    
+// 双人聊天
+- (void)openPersonChat:(NSString *)personNo;
+    
+/// 上传 devieceToke
+- (void)registerDeviceToken:(NSData *)tokenData;
 
 /**
  * 分享文字接口

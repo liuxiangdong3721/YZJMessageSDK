@@ -258,4 +258,6 @@ typedef enum : NSUInteger {
 - (BOOL)allowHidePhoneUserCall;//是否允许已隐藏手机号成员拨打云之家电话,0:关闭;1:打开,默认:0
 
 - (BOOL)userInfoMedalNewPosition;//勋章位置,0:不变;1:放上面,默认:0
+
+- (BOOL)personSynchronize;//人员同步方案开关
 @end

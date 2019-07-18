@@ -22,9 +22,6 @@
 // [BOSConfig sharedConfig].user.oauthTokenSecret]
 @property (copy, nonatomic) NSString *userOauthTokenSecret;
 
-//
-//#define KD_APP_OAUTH_KEY (([UIDevice isiPadDevice]) ? KD_DEFAULT_OAUTH_CONSUMER_KEY_IPAD : KD_DEFAULT_OAUTH_CONSUMER_KEY)
-//#define KD_APP_OAUTH_SECRET (([UIDevice isiPadDevice]) ? KD_DEFAULT_OAUTH_CONSUMER_SECRET_IPAD : KD_DEFAULT_OAUTH_CONSUMER_SECRET)
 @property (copy, nonatomic) NSString *kdAppOauthKey;
 @property (copy, nonatomic) NSString *kdAppOauthSecret;
 

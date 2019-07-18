@@ -417,6 +417,18 @@ SWIFT_CLASS("_TtC13YZJMessageSDK21KDAppListRedFlagModel")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
+/// 应用埋点
+SWIFT_CLASS("_TtC13YZJMessageSDK17KDAppTrackRequest")
+@interface KDAppTrackRequest : KDBusinessRequest
+- (nonnull instancetype)initWithAppId:(NSString * _Nullable)appId appType:(NSInteger)appType OBJC_DESIGNATED_INITIALIZER;
+- (id _Nullable)requestParameters SWIFT_WARN_UNUSED_RESULT;
+- (NSString * _Nullable)requestUrl SWIFT_WARN_UNUSED_RESULT;
+- (nonnull instancetype)initWithResultClass:(Class _Nullable)resultClass SWIFT_UNAVAILABLE;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_DEPRECATED_MSG("-init is unavailable");
+@end
+
 @class ALAssetsLibrary;
 
 SWIFT_CLASS("_TtC13YZJMessageSDK15KDAssetsLibrary")
@@ -567,18 +579,18 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) KDCalendar *
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class EKEventViewController;
+
+@interface KDCalendar (SWIFT_EXTENSION(YZJMessageSDK)) <EKEventViewDelegate>
+- (void)eventViewController:(EKEventViewController * _Nonnull)controller didCompleteWithAction:(EKEventViewAction)action;
+@end
+
 @class UIViewController;
 @class EKEventEditViewController;
 
 @interface KDCalendar (SWIFT_EXTENSION(YZJMessageSDK)) <EKEventEditViewDelegate>
 - (void)presentEventEditView:(UIViewController * _Nullable)inViewController event:(EKEvent * _Nullable)event completion:(void (^ _Nullable)(EKEvent * _Nullable))completion;
 - (void)eventEditViewController:(EKEventEditViewController * _Nonnull)controller didCompleteWithAction:(EKEventEditViewAction)action;
-@end
-
-@class EKEventViewController;
-
-@interface KDCalendar (SWIFT_EXTENSION(YZJMessageSDK)) <EKEventViewDelegate>
-- (void)eventViewController:(EKEventViewController * _Nonnull)controller didCompleteWithAction:(EKEventViewAction)action;
 @end
 
 @class EKCalendarChooser;
@@ -1312,6 +1324,8 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) KDDatabaseMa
 
 
 
+
+
 @class DocumentFileModel;
 
 @interface KDDatabaseManager (SWIFT_EXTENSION(YZJMessageSDK))
@@ -1321,6 +1335,10 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) KDDatabaseMa
 @end
 
 
+@interface KDDatabaseManager (SWIFT_EXTENSION(YZJMessageSDK))
+- (void)insertOrUpdateRelatedPersonsWithPersonIds:(NSArray<NSString *> * _Nullable)personIds needUpdate:(BOOL)needUpdate;
+- (NSArray<NSString *> * _Nullable)queryNeedUpdatePersonIds SWIFT_WARN_UNUSED_RESULT;
+@end
 
 
 
@@ -1348,8 +1366,11 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) KDDatabaseMa
 
 
 
+@class KDAppDataModel;
 
 @interface KDDatabaseManager (SWIFT_EXTENSION(YZJMessageSDK))
+- (void)deleteAllPersonalAppWithoutThirtPartApp;
+- (NSArray<KDAppDataModel *> * _Nullable)queryPersonalAppList SWIFT_WARN_UNUSED_RESULT;
 - (void)updateAppOrderWithSeq:(NSString * _Nullable)seq appId:(NSString * _Nullable)appId;
 - (BOOL)isPersonalAppExist:(NSString * _Nonnull)appId SWIFT_WARN_UNUSED_RESULT;
 @end
@@ -1404,6 +1425,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) KDDatabaseMa
 - (void)updateAllRecordsToReadWithGroup:(GroupDataModel * _Nullable)group;
 - (BOOL)clearNotifyRecordStatusWithGroupId:(NSString * _Nullable)groupId SWIFT_WARN_UNUSED_RESULT;
 - (BOOL)updateNotifyRecordStatusWithMsgId:(NSString * _Nullable)msgId groupId:(NSString * _Nullable)groupId SWIFT_WARN_UNUSED_RESULT;
+- (void)insertMessageUnreadStateWithList:(NSArray<NSDictionary<NSString *, id> *> * _Nonnull)list isExt:(BOOL)isExt;
 - (NSDictionary<NSString *, NSString *> * _Nullable)queryMsgUnreadStateWithGroupId:(NSString * _Nullable)groupId SWIFT_WARN_UNUSED_RESULT;
 - (NSDictionary<NSString *, NSString *> * _Nullable)queryMsgUnreadStateWithMsgId:(NSString * _Nullable)msgId SWIFT_WARN_UNUSED_RESULT;
 - (void)clearMsgUnreadStateWithGroupId:(NSString * _Nullable)groupId;
@@ -1413,6 +1435,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) KDDatabaseMa
 @class KDPerstatusModel;
 
 @interface KDDatabaseManager (SWIFT_EXTENSION(YZJMessageSDK))
+- (void)insertOrReplaceWithPersons:(NSArray<PersonSimpleDataModel *> * _Nonnull)persons first:(BOOL)first;
 - (void)insertOrReplaceWithPerson:(PersonSimpleDataModel * _Nonnull)person first:(BOOL)first;
 - (PersonSimpleDataModel * _Nullable)queryPersonWithPersonId:(NSString * _Nonnull)personId SWIFT_WARN_UNUSED_RESULT;
 - (PersonSimpleDataModel * _Nullable)queryPersonWithContactName:(NSString * _Nonnull)contactName SWIFT_WARN_UNUSED_RESULT;
@@ -1526,7 +1549,8 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) KDDatabaseMa
 - (BOOL)updateGroupDataModelParam:(GroupDataModel * _Nullable)group SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<NSString *> * _Nullable)queryInactivePrivateGroupIdsWithOffset:(NSUInteger)offset SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<GroupDataModel *> * _Nonnull)queryRecentGroupListWithLimit:(NSInteger)limit offset:(NSUInteger)offset SWIFT_WARN_UNUSED_RESULT;
-- (NSArray<GroupDataModel *> * _Nonnull)queryPrivateGroupListWithLimit:(NSInteger)limit offset:(NSInteger)offset fold:(BOOL)fold focusMode:(BOOL)focusMode SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<GroupDataModel *> * _Nonnull)queryInnerGroupListWithLimit:(NSInteger)limit offset:(NSInteger)offset fold:(BOOL)fold focusMode:(BOOL)focusMode SWIFT_WARN_UNUSED_RESULT;
+- (NSArray<GroupDataModel *> * _Nonnull)queryPrivateGroupListWithLimit:(NSInteger)limit offset:(NSInteger)offset fold:(BOOL)fold focusMode:(BOOL)focusMode filterExtGroup:(BOOL)filterExtGroup SWIFT_WARN_UNUSED_RESULT;
 - (uint64_t)queryGrouplistCountBetweenLatestDBUnreadGroupAndMemoryLastMsgSendTime:(NSString * _Nullable)lastMsgSendTime SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<GroupDataModel *> * _Nonnull)queryPrivateGroupListWithLimit:(NSInteger)limit offset:(NSInteger)offset SWIFT_WARN_UNUSED_RESULT;
 - (void)deleteAllFoldPublicGroup;
@@ -2188,6 +2212,30 @@ SWIFT_CLASS("_TtC13YZJMessageSDK28KDGetAllowOrgAdminProperties")
 @end
 
 
+SWIFT_CLASS("_TtC13YZJMessageSDK27KDGetChangePersonIdsRequest")
+@interface KDGetChangePersonIdsRequest : KDBusinessRequest
+- (NSString * _Nullable)requestUrl SWIFT_WARN_UNUSED_RESULT;
+- (id _Nullable)requestParameters SWIFT_WARN_UNUSED_RESULT;
+- (KDResponseSerializer)responseSerializer SWIFT_WARN_UNUSED_RESULT;
+- (NSTimeInterval)requestTimeoutInterval SWIFT_WARN_UNUSED_RESULT;
+- (nonnull instancetype)initWithResultClass:(Class _Nullable)resultClass OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+SWIFT_CLASS("_TtC13YZJMessageSDK28KDGetChangePersonInfoRequest")
+@interface KDGetChangePersonInfoRequest : KDBusinessRequest
+- (nonnull instancetype)initWithPersonIds:(NSString * _Nullable)personIds OBJC_DESIGNATED_INITIALIZER;
+- (NSString * _Nullable)requestUrl SWIFT_WARN_UNUSED_RESULT;
+- (id _Nullable)requestParameters SWIFT_WARN_UNUSED_RESULT;
+- (KDResponseSerializer)responseSerializer SWIFT_WARN_UNUSED_RESULT;
+- (NSTimeInterval)requestTimeoutInterval SWIFT_WARN_UNUSED_RESULT;
+- (nonnull instancetype)initWithResultClass:(Class _Nullable)resultClass SWIFT_UNAVAILABLE;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_DEPRECATED_MSG("-init is unavailable");
+@end
+
+
 SWIFT_CLASS("_TtC13YZJMessageSDK26KDGetChangedAddressRequest")
 @interface KDGetChangedAddressRequest : KDBusinessRequest
 - (nonnull instancetype)initWithUpdateTime:(NSString * _Nullable)updateTime token:(NSString * _Nullable)token eid:(NSString * _Nullable)eid OBJC_DESIGNATED_INITIALIZER;
@@ -2248,6 +2296,15 @@ SWIFT_CLASS("_TtC13YZJMessageSDK27KDGetGroupAtPrefenceRequest")
 - (id _Nullable)requestParameters SWIFT_WARN_UNUSED_RESULT;
 - (nonnull instancetype)initWithResultClass:(Class _Nullable)resultClass OBJC_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+SWIFT_CLASS("_TtC13YZJMessageSDK31KDGetPersonalNetworkAppsRequest")
+@interface KDGetPersonalNetworkAppsRequest : KDBusinessRequest
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+- (NSString * _Nullable)requestUrl SWIFT_WARN_UNUSED_RESULT;
+- (id _Nullable)requestParameters SWIFT_WARN_UNUSED_RESULT;
+- (nonnull instancetype)initWithResultClass:(Class _Nullable)resultClass SWIFT_UNAVAILABLE;
 @end
 
 
@@ -3014,6 +3071,15 @@ typedef SWIFT_ENUM(int32_t, KDMessageSliceBorderCheckResult, closed) {
 };
 
 
+@interface KDMessageSliceLogic (SWIFT_EXTENSION(YZJMessageSDK))
++ (NSArray<RecordDataModel *> * _Nullable)filterMessageSlice:(NSInteger)sendTime records:(NSArray<RecordDataModel *> * _Nullable)records loadType:(enum KDMessageLoadType)loadType groupId:(NSString * _Nullable)groupId SWIFT_WARN_UNUSED_RESULT;
+@end
+
+@class KDMessageSliceRange;
+
+@interface KDMessageSliceLogic (SWIFT_EXTENSION(YZJMessageSDK))
++ (void)expandMessageSlice:(NSInteger)sendTime otherRange:(KDMessageSliceRange * _Nullable)otherRange loadType:(enum KDMessageLoadType)loadType groupId:(NSString * _Nullable)groupId;
+@end
 
 @class KDMessageSliceNode;
 
@@ -3021,20 +3087,11 @@ typedef SWIFT_ENUM(int32_t, KDMessageSliceBorderCheckResult, closed) {
 + (BOOL)shrinkMessageSlice:(KDMessageSliceNode * _Nullable)targetNode previousNode:(KDMessageSliceNode * _Nullable)previousNode nextNode:(KDMessageSliceNode * _Nullable)nextNode groupId:(NSString * _Nullable)groupId;
 @end
 
-@class KDMessageSliceRange;
+
+
 
 @interface KDMessageSliceLogic (SWIFT_EXTENSION(YZJMessageSDK))
 + (BOOL)mergeMessageSlice:(KDMessageSliceRange * _Nullable)range groupId:(NSString * _Nullable)groupId;
-@end
-
-
-@interface KDMessageSliceLogic (SWIFT_EXTENSION(YZJMessageSDK))
-+ (NSArray<RecordDataModel *> * _Nullable)filterMessageSlice:(NSInteger)sendTime records:(NSArray<RecordDataModel *> * _Nullable)records loadType:(enum KDMessageLoadType)loadType groupId:(NSString * _Nullable)groupId SWIFT_WARN_UNUSED_RESULT;
-@end
-
-
-@interface KDMessageSliceLogic (SWIFT_EXTENSION(YZJMessageSDK))
-+ (void)expandMessageSlice:(NSInteger)sendTime otherRange:(KDMessageSliceRange * _Nullable)otherRange loadType:(enum KDMessageLoadType)loadType groupId:(NSString * _Nullable)groupId;
 @end
 
 
@@ -3176,11 +3233,11 @@ SWIFT_CLASS("_TtC13YZJMessageSDK18KDNoticeController")
 
 
 
-
-
 @interface KDNoticeController (SWIFT_EXTENSION(YZJMessageSDK))
 @property (nonatomic, readonly) BOOL isPopupShowing;
 @end
+
+
 
 
 @interface KDNoticeController (SWIFT_EXTENSION(YZJMessageSDK)) <KDNoticeBoxVCDelegate>
@@ -3309,6 +3366,24 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) KDOpenAPICli
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
+SWIFT_CLASS("_TtC13YZJMessageSDK26KDPersonSynchronizeHandler")
+@interface KDPersonSynchronizeHandler : NSObject
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) KDPersonSynchronizeHandler * _Nonnull shared;)
++ (KDPersonSynchronizeHandler * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+@interface KDPersonSynchronizeHandler (SWIFT_EXTENSION(YZJMessageSDK))
+- (void)getChangePersonInfo:(NSArray<NSString *> * _Nonnull)personIds completion:(void (^ _Nonnull)(BOOL, KDRequest * _Nonnull))completion;
+@end
+
+
+@interface KDPersonSynchronizeHandler (SWIFT_EXTENSION(YZJMessageSDK))
+- (void)getAllInnerPersonIds:(void (^ _Nonnull)(BOOL, NSArray<NSString *> * _Nullable))completion;
+@end
+
 @class NSString;
 
 SWIFT_CLASS("_TtC13YZJMessageSDK7KDPhoto")
@@ -3416,6 +3491,16 @@ SWIFT_CLASS("_TtC13YZJMessageSDK23KDRedPacketSendableItem")
 @end
 
 
+SWIFT_CLASS("_TtC13YZJMessageSDK28KDRegisterDeviceTokenRequest")
+@interface KDRegisterDeviceTokenRequest : KDBusinessRequest
+- (nonnull instancetype)initWithAppClientId:(NSString * _Nullable)appClientId deviceToken:(NSString * _Nullable)deviceToken deviceTokenVer:(NSString * _Nullable)deviceTokenVer;
+- (NSString * _Nullable)requestUrl SWIFT_WARN_UNUSED_RESULT;
+- (id _Nullable)requestParameters SWIFT_WARN_UNUSED_RESULT;
+- (nonnull instancetype)initWithResultClass:(Class _Nullable)resultClass OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
 SWIFT_CLASS("_TtC13YZJMessageSDK27KDRejectMsgPidByUserRequest")
 @interface KDRejectMsgPidByUserRequest : KDBusinessRequest
 - (nonnull instancetype)initWithAction:(NSString * _Nullable)action pid:(NSString * _Nullable)pid;
@@ -3442,6 +3527,30 @@ SWIFT_CLASS("_TtC13YZJMessageSDK28KDResetPushBadgeCountRequest")
 - (nonnull instancetype)initWithInnerCount:(NSInteger)innerCount todoCount:(NSInteger)todoCount extCount:(NSInteger)extCount;
 - (NSString * _Nullable)requestUrl SWIFT_WARN_UNUSED_RESULT;
 - (id _Nullable)requestParameters SWIFT_WARN_UNUSED_RESULT;
+- (nonnull instancetype)initWithResultClass:(Class _Nullable)resultClass OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+SWIFT_CLASS("_TtC13YZJMessageSDK18KDRevealPhoneModel")
+@interface KDRevealPhoneModel : KDJSONModel
+@property (nonatomic, copy) NSString * _Nullable phone;
+- (null_unspecified instancetype)initWithString:(NSString * _Null_unspecified)string error:(JSONModelError * _Nullable * _Null_unspecified)err OBJC_DESIGNATED_INITIALIZER;
+- (null_unspecified instancetype)initWithString:(NSString * _Null_unspecified)string usingEncoding:(NSUInteger)encoding error:(JSONModelError * _Nullable * _Null_unspecified)err OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithDictionary:(NSDictionary * _Null_unspecified)dict error:(NSError * _Nullable * _Nullable)error OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithData:(NSData * _Null_unspecified)data error:(NSError * _Nullable * _Nullable)error OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+- (null_unspecified instancetype)initFromURLWithString:(NSString * _Null_unspecified)urlString completion:(JSONModelBlock _Null_unspecified)completeBlock OBJC_DESIGNATED_INITIALIZER SWIFT_DEPRECATED;
+@end
+
+
+SWIFT_CLASS("_TtC13YZJMessageSDK20KDRevealPhoneRequest")
+@interface KDRevealPhoneRequest : KDBusinessRequest
+- (nonnull instancetype)initWithViewPersonId:(NSString * _Nonnull)viewPersonId;
+- (NSString * _Nullable)requestUrl SWIFT_WARN_UNUSED_RESULT;
+- (id _Nullable)requestParameters SWIFT_WARN_UNUSED_RESULT;
+- (KDRequestSerializer)requestSerializer SWIFT_WARN_UNUSED_RESULT;
 - (nonnull instancetype)initWithResultClass:(Class _Nullable)resultClass OBJC_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
@@ -4270,6 +4379,15 @@ SWIFT_CLASS("_TtC13YZJMessageSDK24KDUnbindDeptGroupRequest")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
+SWIFT_CLASS("_TtC13YZJMessageSDK22KDUserPanelAppsRequest")
+@interface KDUserPanelAppsRequest : KDBusinessRequest
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+- (NSString * _Nullable)requestUrl SWIFT_WARN_UNUSED_RESULT;
+- (id _Nullable)requestParameters SWIFT_WARN_UNUSED_RESULT;
+- (nonnull instancetype)initWithResultClass:(Class _Nullable)resultClass SWIFT_UNAVAILABLE;
+@end
+
 enum KDV9ButtonStyle : NSInteger;
 
 SWIFT_CLASS("_TtC13YZJMessageSDK10KDV9Button")
@@ -4499,11 +4617,11 @@ SWIFT_AVAILABILITY(ios,introduced=11.0)
 
 
 
-
-
 @interface UIImage (SWIFT_EXTENSION(YZJMessageSDK))
 + (UIImage * _Nullable)kd_localizedWithNamed:(NSString * _Nonnull)named SWIFT_WARN_UNUSED_RESULT;
 @end
+
+
 
 
 
@@ -4641,6 +4759,11 @@ SWIFT_AVAILABILITY(ios,introduced=11.0)
 
 
 
+@interface XTChatViewController (SWIFT_EXTENSION(YZJMessageSDK))
+- (void)sendTextMessage:(NSString * _Nullable)text existedRecord:(RecordDataModel * _Nullable)existedRecord;
+@end
+
+
 
 
 @interface XTChatViewController (SWIFT_EXTENSION(YZJMessageSDK))
@@ -4649,18 +4772,7 @@ SWIFT_AVAILABILITY(ios,introduced=11.0)
 
 
 @interface XTChatViewController (SWIFT_EXTENSION(YZJMessageSDK))
-- (void)sendTextMessage:(NSString * _Nullable)text existedRecord:(RecordDataModel * _Nullable)existedRecord;
-@end
-
-
-@interface XTChatViewController (SWIFT_EXTENSION(YZJMessageSDK))
 - (CGFloat)cellHeightWithDataInternal:(BubbleDataInternal * _Nullable)dataInternal lastRecord:(RecordDataModel * _Nullable)lastRecord SWIFT_WARN_UNUSED_RESULT;
-@end
-
-
-@interface XTChatViewController (SWIFT_EXTENSION(YZJMessageSDK))
-- (void)sendVideoWithExistedRecord:(RecordDataModel * _Nullable)existedRecord;
-- (void)sendSelectedVideoWithFileURL:(NSURL * _Nullable)fileURL thumbnail:(UIImage * _Nullable)thumbnail duration:(double)duration;
 @end
 
 
@@ -4669,6 +4781,12 @@ SWIFT_AVAILABILITY(ios,introduced=11.0)
 @interface XTChatViewController (SWIFT_EXTENSION(YZJMessageSDK))
 - (void)sendImage:(UIImage * _Nullable)image existedRecord:(RecordDataModel * _Nullable)existedRecord;
 - (void)sendGif:(NSData * _Nullable)gifData existedRecord:(RecordDataModel * _Nullable)existedRecord;
+@end
+
+
+@interface XTChatViewController (SWIFT_EXTENSION(YZJMessageSDK))
+- (void)sendVideoWithExistedRecord:(RecordDataModel * _Nullable)existedRecord;
+- (void)sendSelectedVideoWithFileURL:(NSURL * _Nullable)fileURL thumbnail:(UIImage * _Nullable)thumbnail duration:(double)duration;
 @end
 
 

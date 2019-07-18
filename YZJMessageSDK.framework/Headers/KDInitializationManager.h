@@ -29,6 +29,10 @@ extern NSString *const kLoginUserInfoDidChangeNotification;
 - (void)startInitializeCompletionBlock:(KDInitializationCompletionBlock)completionBlock
                            failedBlock:(KDInitializationFailedBlock)failedBlock;
 
+- (void)startInitializeWithPersonIds:(NSArray *)personIds
+                     completionBlock:(KDInitializationCompletionBlock)completionBlock
+                         failedBlock:(KDInitializationFailedBlock)failedBlock;
+
 //是否正在进行初始化
 - (BOOL)isInitializing;
 //是否正在进行首次初始化

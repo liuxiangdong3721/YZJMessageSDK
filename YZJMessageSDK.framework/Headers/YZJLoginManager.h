@@ -22,6 +22,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)isLogin;
 
+//当前活跃的聊天界面的group
+@property (nonatomic, strong, nullable) GroupDataModel *currentShowGroup;
+
+
+- (void)postCurrentShowGroupNotification:(nullable GroupDataModel *)currentShowGroup;
+
 @end
 
 NS_ASSUME_NONNULL_END

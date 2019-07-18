@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YZJMessageSDK'
-  s.version          = '0.1.1'
+  s.version          = '0.1.0'
   s.summary          = 'A short description of YZJMessageSDK.'
 
 # This description is used to generate tags and improve search results.
@@ -30,18 +30,43 @@ TODO: Add long description of the pod here.
     s.ios.deployment_target = '8.0'
     s.swift_version = '4.0'
   
-    
-    s.vendored_frameworks = 'YZJMessageSDK.framework'
-    s.resource = "YZJMessageSDK1.bundle"
+    s.public_header_files = 'YZJMessageSDK/Classes/public/**/*.{h}'
+    s.source_files = 'YZJMessageSDK/Classes/**/*'
+   
+   #s.resources = ['YZJMessageSDK/Assets/*.xcassets', 'YZJMessageSDK/Assets/*.xib', 'YZJMessageSDK/Assets/YZJMessageSDK1.bundle']
+   #s.resources = ['YZJMessageSDK/Assets/*.xcassets', 'YZJMessageSDK/Assets/YZJMessageSDK1.bundle']
 
-    s.resources = [
-    'Assets/*.xcassets',
-    'Assets/*.xib',
-    'Assets/Expression/**/*'
+   s.resources = [
+        'YZJMessageSDK/Assets/*.xcassets',
+        'YZJMessageSDK/Assets/*.xib',
+        'YZJMessageSDK/Assets/Expression/**/*',
+        'YZJMessageSDK/Assets/voices/*.xib'
     ]
-    s.resource_bundles = {
-    'YZJMessageSDK1' => ['Assets/YZJMessageSDK1/*']
+   s.resource_bundles = {
+      'YZJMessageSDK1' => ['YZJMessageSDK/Assets/YZJMessageSDK1/*']
+   }
+
+    s.user_target_xcconfig = {
+        'GCC_PREPROCESSOR_DEFINITIONS' => 'MAS_SHORTHAND=1',
     }
+    
+    s.pod_target_xcconfig = {
+        'GCC_PREPROCESSOR_DEFINITIONS' => 'MAS_SHORTHAND=1',
+        'OTHER_LDFLAGS' => '-lObjC',
+        'CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES' => 'YES',
+        'ENABLE_BITCODE' => 'NO'
+    }
+    
+    s.prefix_header_file = 'YZJMessageSDK/Classes/public/YZJMessageSDK.pch'    #PCH文件
+    
+    #系统依赖库
+    s.frameworks = 'UIKit', 'Foundation', 'CoreTelephony', 'SystemConfiguration', 'AVFoundation', 'AudioToolbox', 'CoreLocation', 'Contacts', 'AddressBook', 'QuartzCore', 'CoreGraphics', 'DeviceCheck', 'AVKit', 'CoreVideo', 'OpenAL', 'Accelerate', 'Accounts', 'AddressBookUI', 'AdSupport', 'ARKit', 'AssetsLibrary',  'BusinessChat','AuthenticationServices', 'CarPlay', 'CFNetwork', 'ClassKit', 'ContactsUI', 'CoreAudio', 'CoreAudioKit', 'CoreBluetooth', 'CoreData', 'CoreFoundation', 'CoreImage', 'CoreMedia', 'CoreMIDI', 'CoreML', 'CoreMotion', 'CoreServices', 'CoreSpotlight', 'CoreText', 'EventKit', 'EventKitUI', 'ExternalAccessory', 'FileProvider', 'FileProviderUI', 'GameController', 'GameKit', 'GameplayKit', 'GLKit', 'GSS', 'HealthKit', 'HealthKitUI', 'HomeKit', 'iAd', 'IdentityLookup', 'IdentityLookupUI', 'ImageIO', 'Intents', 'IntentsUI', 'IOKit', 'IOSurface', 'JavaScriptCore', 'LocalAuthentication', 'MapKit', 'MediaAccessibility', 'MediaPlayer', 'MediaToolbox', 'Messages', 'MessageUI', 'Metal', 'MetalKit', 'MetalPerformanceShaders', 'MobileCoreServices', 'ModelIO', 'MultipeerConnectivity', 'NaturalLanguage', 'Network', 'NetworkExtension', 'NewsstandKit', 'NotificationCenter', 'OpenGLES', 'PassKit', 'PDFKit', 'Photos', 'PhotosUI', 'PushKit', 'QuickLook', 'ReplayKit', 'SafariServices', 'SceneKit', 'Security', 'Social', 'Speech', 'SpriteKit', 'StoreKit', 'Twitter', 'UIKit', 'UserNotifications', 'UserNotificationsUI', 'VideoSubscriberAccount', 'VideoToolbox', 'Vision',
+    'WatchConnectivity', 'WatchKit', 'WebKit'
+    
+    
+    s.libraries = 'z', 'resolv.9', 'c++', 'iconv', 'c'
+    
+    s.vendored_frameworks = 'YZJMessageSDK/Assets/mars.framework'
     
     # 公有库依赖
     s.dependency 'AFNetworking'

@@ -11,7 +11,7 @@
 #pragma mark - 应用配置 -
 extern NSString *const KDAPPClientID_IPHONE;
 extern NSString *const KDAPPClientID_IPAD;
-#define kAppClientId (([UIDevice isiPadDevice]) ? KDAPPClientID_IPAD : KDAPPClientID_IPHONE)
+#define kAppClientId [YZJMessageSDKManager shared].config.appClientId
 
 extern NSString * KD_APPNAME;
 extern NSString * KD_FEEDNAME;
@@ -19,8 +19,8 @@ extern NSString *const KD_DEFAULT_OAUTH_CONSUMER_KEY;
 extern NSString *const KD_DEFAULT_OAUTH_CONSUMER_SECRET;
 extern NSString *const KD_DEFAULT_OAUTH_CONSUMER_KEY_IPAD;
 extern NSString *const KD_DEFAULT_OAUTH_CONSUMER_SECRET_IPAD;
-#define KD_APP_OAUTH_KEY (([UIDevice isiPadDevice]) ? KD_DEFAULT_OAUTH_CONSUMER_KEY_IPAD : KD_DEFAULT_OAUTH_CONSUMER_KEY)
-#define KD_APP_OAUTH_SECRET (([UIDevice isiPadDevice]) ? KD_DEFAULT_OAUTH_CONSUMER_SECRET_IPAD : KD_DEFAULT_OAUTH_CONSUMER_SECRET)
+#define KD_APP_OAUTH_KEY [YZJMessageSDKManager shared].config.appOauthKey
+#define KD_APP_OAUTH_SECRET [YZJMessageSDKManager shared].config.appOauthSecret
 
 extern NSString *const KDAPP_CHANNEL;
 extern NSString *const KDREGISTER_CHANNEL;
