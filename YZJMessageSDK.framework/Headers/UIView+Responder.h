@@ -12,5 +12,5 @@
 
 -(UIViewController *)parentController;
 
-
+- (UIView *)findSubview:(NSString *)name resursion:(BOOL)resursion;
 @end

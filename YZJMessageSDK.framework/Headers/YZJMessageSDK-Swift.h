@@ -2949,6 +2949,15 @@ SWIFT_CLASS("_TtC13YZJMessageSDK13KDLoadingView")
 @end
 
 
+SWIFT_CLASS("_TtC13YZJMessageSDK11KDLocalized")
+@interface KDLocalized : NSObject
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_DEPRECATED_MSG("-init is unavailable");
+/// 获取语言文件bundle
++ (NSBundle * _Nonnull)bundle SWIFT_WARN_UNUSED_RESULT;
+@end
+
+
 SWIFT_CLASS("_TtC13YZJMessageSDK22KDLocationAlertManager")
 @interface KDLocationAlertManager : NSObject
 + (void)showLocationAlertOnTap:(void (^ _Nullable)(NSInteger))onTap;
@@ -3078,6 +3087,11 @@ typedef SWIFT_ENUM(int32_t, KDMessageSliceBorderCheckResult, closed) {
 @class KDMessageSliceRange;
 
 @interface KDMessageSliceLogic (SWIFT_EXTENSION(YZJMessageSDK))
++ (BOOL)mergeMessageSlice:(KDMessageSliceRange * _Nullable)range groupId:(NSString * _Nullable)groupId;
+@end
+
+
+@interface KDMessageSliceLogic (SWIFT_EXTENSION(YZJMessageSDK))
 + (void)expandMessageSlice:(NSInteger)sendTime otherRange:(KDMessageSliceRange * _Nullable)otherRange loadType:(enum KDMessageLoadType)loadType groupId:(NSString * _Nullable)groupId;
 @end
 
@@ -3088,11 +3102,6 @@ typedef SWIFT_ENUM(int32_t, KDMessageSliceBorderCheckResult, closed) {
 @end
 
 
-
-
-@interface KDMessageSliceLogic (SWIFT_EXTENSION(YZJMessageSDK))
-+ (BOOL)mergeMessageSlice:(KDMessageSliceRange * _Nullable)range groupId:(NSString * _Nullable)groupId;
-@end
 
 
 SWIFT_CLASS("_TtC13YZJMessageSDK18KDMessageSliceNode")

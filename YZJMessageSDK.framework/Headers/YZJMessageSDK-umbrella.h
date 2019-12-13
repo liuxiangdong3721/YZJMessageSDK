@@ -287,6 +287,7 @@
 #import "XTSearchCell.h"
 #import "XTTimelineSearchCell.h"
 #import "UIImage+Additions.h"
+#import "UIView+Responder.h"
 #import "UIViewController+DZCategory.h"
 #import "CKSlideSwitchView.h"
 #import "ContactUtils.h"
